@@ -96,60 +96,31 @@ RUN /srv/paws/bin/python -m bash_kernel.install
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
-###
-## same as Dockerfile.ubuntu (ubuntu-14.04)
-#FROM docker-registry.tools.wmflabs.org/jessie-toollabs
-#MAINTAINER DrTrigon <dr.trigon@surfeu.ch>
-
-## LABEL author.user1="Abdeali JK <abdealikothari@gmail.com>" \
-##       author.user2="DrTrigon <dr.trigon@surfeu.ch>"
-
-# Initial update
-RUN apt-get -y update
-
+# Install file-metadata
 # Basic packages
-RUN apt-get install -y \
-  build-essential \
-  make \
-  git
-
-# Pip - install latest version so that wheels are used
-RUN apt-get install -y python-pip && \
-  pip install -U pip
-
+RUN apt-get install -y make
 # Packages for setup
 RUN apt-get install -y pkg-config
-
 # ExifTool
 RUN apt-get install -y exiftool
-
 # OpenCV
 RUN apt-get install -y python-opencv opencv-data
-
 # Image Magick / wand
 RUN apt-get install -y libmagickwand-dev python-dev
-
 # avprobe / ffprobe
 RUN apt-get install -y libav-tools
-
 # ZXing
 RUN apt-get install -y openjdk-7-jre
-
 # Dlib
 RUN apt-get install -y cmake libboost-python-dev python-dev
-
 # ZBar
 RUN apt-get install -y libzbar-dev python-dev
-
 # Add the repository
 RUN git clone https://github.com/pywikibot-catfiles/file-metadata.git /opt/file-metadata
-
 # Test requirements
-RUN pip install -r /opt/file-metadata/test-requirements.txt
-
+RUN /srv/paws/bin/pip install -r /opt/file-metadata/test-requirements.txt
 # Install package
-RUN pip install -e /opt/file-metadata --upgrade
-###
+RUN /srv/paws/bin/pip install -e /opt/file-metadata --upgrade
 
 # Install pywikibot
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
