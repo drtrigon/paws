@@ -86,6 +86,7 @@ RUN /srv/paws/bin/pip install -U pip
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
 # Install mass amount of python libraries!
+RUN apt-get install -y python-enchant
 COPY requirements.txt /tmp/requirements.txt
 RUN /srv/paws/bin/pip --no-cache-dir install -r /tmp/requirements.txt
 
@@ -96,7 +97,7 @@ RUN /srv/paws/bin/python -m bash_kernel.install
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
-# Install file-metadata
+# Install file-metadata like on ubuntu-14.04 doing stepwise as for centos-7
 # Basic packages
 RUN apt-get install -y make
 # Packages for setup
@@ -120,7 +121,8 @@ RUN git clone https://github.com/pywikibot-catfiles/file-metadata.git /opt/file-
 # Test requirements
 RUN /srv/paws/bin/pip install -r /opt/file-metadata/test-requirements.txt
 # Install package
-RUN /srv/paws/bin/pip install -e /opt/file-metadata --upgrade
+RUN /srv/paws/bin/pip install /opt/file-metadata --upgrade
+RUN /srv/paws/bin/pip install -e /opt/file-metadata
 
 # Install pywikibot
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
